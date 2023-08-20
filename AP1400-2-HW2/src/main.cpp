@@ -4,11 +4,13 @@
 #include "client.h"
 #include "server.h"
 
+using namespace std;
 
 int main(int argc, char **argv)
 {
-    if (false) // make false to run unit-tests
+    if (true) // make false to run unit-tests
     {
+        cout<<"123"<<endl;
         // debug section
     }
     else
