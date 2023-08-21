@@ -9,7 +9,25 @@ Server::Server() {}
 
 shared_ptr<Client> Server::add_client(string id)
 {
-    // this->clients[]
+    bool exist=false;
+    for (auto &pair : this->clients)
+    {
+        string _id=pair.first->get_id();
+        if (id==_id)
+        {
+            exist=true;
+            break;
+        }
+    }
+    shared_ptr<Client> c;
+    if (exist)
+    {
+        /* code */
+    }else{
+         c =make_shared<Client>(id,*this);
+    }
+     this->clients[c]=5;
+     return c;
 }
 
 // Server
