@@ -10,3 +10,6 @@ string Client::get_id(){
     return this->id;
 }
 
+double Client::get_wallet(){
+    return ((Server*)(this->server))->get_wallet(this->id);
+}

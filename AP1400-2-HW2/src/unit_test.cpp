@@ -11,9 +11,6 @@ TEST(HW1Test, TEST1)
     EXPECT_EQ(bryan->get_id(), "bryan");
 }
 
-/*
-
-
 TEST(HW1Test, TEST2) {
     Server server{};
     auto bryan{server.add_client("bryan")};
@@ -21,11 +18,15 @@ TEST(HW1Test, TEST2) {
     EXPECT_EQ(bryan.get(), bryan_from_server.get());
 }
 
+
 TEST(HW1Test, TEST3) {
     Server server{};
     auto bryan{server.add_client("bryan")};
     EXPECT_DOUBLE_EQ(bryan->get_wallet(), 5.0);
 }
+
+/*
+
 
 TEST(HW1Test, TEST4) {
     Server server{};
