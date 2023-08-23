@@ -3,6 +3,8 @@
 #include "gmock/gmock.h"
 #include "server.h"
 #include "client.h"
+#include "crypto.h"
+
 
 TEST(HW1Test, TEST1)
 {
@@ -25,8 +27,6 @@ TEST(HW1Test, TEST3) {
     EXPECT_DOUBLE_EQ(bryan->get_wallet(), 5.0);
 }
 
-/*
-
 
 TEST(HW1Test, TEST4) {
     Server server{};
@@ -45,6 +45,7 @@ TEST(HW1Test, TEST5) {
     EXPECT_TRUE(!bryan->get_publickey().empty());
 }
 
+
 TEST(HW1Test, TEST6) {
     Server server{};
     auto bryan{server.add_client("bryan")};
@@ -52,14 +53,16 @@ TEST(HW1Test, TEST6) {
     EXPECT_TRUE(bryan->get_publickey() != clint->get_publickey());
 }
 
+
 TEST(HW1Test, TEST7) {
     Server server{};
     auto bryan{server.add_client("bryan")};
     auto clint{server.add_client("clint")};
-    Server const* p{&server};
+    Server * p{&server};
     auto client = p->get_client("no_one");
     EXPECT_TRUE(client == nullptr);
 }
+
 
 TEST(HW1Test, TEST8) {
     Server server{};
@@ -71,12 +74,17 @@ TEST(HW1Test, TEST8) {
 TEST(HW1Test, TEST9) {
     Server server{};
     auto bryan{server.add_client("bryan")};
-    Client const* p{bryan.get()};
+    Client * p{bryan.get()};
     std::string signature{p->sign("mydata")};
     EXPECT_TRUE(crypto::verifySignature(p->get_publickey(), "mydata", signature));
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "notmydata", signature));
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "mydata", "not_my_signature"));
 }
+
+
+/*
+
+
 
 TEST(HW1Test, TEST10) {
     std::string sender{}, receiver{};

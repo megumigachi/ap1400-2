@@ -5,6 +5,7 @@
 using std::make_shared;
 using std::shared_ptr;
 using std::string;
+using std::map;
 
 string addRandomString(string origin)
 {
@@ -43,6 +44,10 @@ shared_ptr<Client> Server::add_client(string id)
     return c;
 }
 
+map<shared_ptr<Client>,double>Server::get_clients() const{
+    return this->clients;
+}
+
 shared_ptr<Client> Server::get_client(string id)
 {
     shared_ptr<Client> c = nullptr;
@@ -65,5 +70,26 @@ double Server::get_wallet(std::string id)
     }
     return 0;
 }
+
+
+std::vector<std::string> pending_trxs;
+
+
+
+ void  show_pending_transactions()
+ {
+ 	std::cout  <<  std::string(20, '*') <<  std::endl;
+ 	for(const  auto& trx : pending_trxs)
+ 		std::cout << trx <<  std::endl;
+ 	std::cout  <<  std::string(20, '*') <<  std::endl;
+ }
+
+  void  show_wallets(const  Server& server)
+ {
+ 	std::cout << std::string(20, '*') << std::endl;
+ 	for(const auto& client: server.get_clients())
+ 		std::cout << client.first->get_id() <<  " : "  << client.second << std::endl;
+ 	std::cout << std::string(20, '*') << std::endl;
+ }
 
 // Server
