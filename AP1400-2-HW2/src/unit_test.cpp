@@ -5,7 +5,6 @@
 #include "client.h"
 #include "crypto.h"
 
-
 TEST(HW1Test, TEST1)
 {
     Server server{};
@@ -13,22 +12,23 @@ TEST(HW1Test, TEST1)
     EXPECT_EQ(bryan->get_id(), "bryan");
 }
 
-TEST(HW1Test, TEST2) {
+TEST(HW1Test, TEST2)
+{
     Server server{};
     auto bryan{server.add_client("bryan")};
     auto bryan_from_server{server.get_client("bryan")};
     EXPECT_EQ(bryan.get(), bryan_from_server.get());
 }
 
-
-TEST(HW1Test, TEST3) {
+TEST(HW1Test, TEST3)
+{
     Server server{};
     auto bryan{server.add_client("bryan")};
     EXPECT_DOUBLE_EQ(bryan->get_wallet(), 5.0);
 }
 
-
-TEST(HW1Test, TEST4) {
+TEST(HW1Test, TEST4)
+{
     Server server{};
     auto bryan1{server.add_client("bryan")};
     auto bryan2{server.add_client("bryan")};
@@ -38,55 +38,53 @@ TEST(HW1Test, TEST4) {
     EXPECT_NE(bryan2->get_id(), bryan3->get_id());
 }
 
-TEST(HW1Test, TEST5) {
+TEST(HW1Test, TEST5)
+{
     Server server{};
     auto bryan{server.add_client("bryan")};
     std::string public_key{bryan->get_publickey()};
     EXPECT_TRUE(!bryan->get_publickey().empty());
 }
 
-
-TEST(HW1Test, TEST6) {
+TEST(HW1Test, TEST6)
+{
     Server server{};
     auto bryan{server.add_client("bryan")};
     auto clint{server.add_client("clint")};
     EXPECT_TRUE(bryan->get_publickey() != clint->get_publickey());
 }
 
-
-TEST(HW1Test, TEST7) {
+TEST(HW1Test, TEST7)
+{
     Server server{};
     auto bryan{server.add_client("bryan")};
     auto clint{server.add_client("clint")};
-    Server * p{&server};
+    Server *p{&server};
     auto client = p->get_client("no_one");
     EXPECT_TRUE(client == nullptr);
 }
 
-
-TEST(HW1Test, TEST8) {
+TEST(HW1Test, TEST8)
+{
     Server server{};
     auto bryan{server.add_client("bryan")};
     auto clint{server.add_client("clint")};
     show_wallets(server);
 }
 
-TEST(HW1Test, TEST9) {
+TEST(HW1Test, TEST9)
+{
     Server server{};
     auto bryan{server.add_client("bryan")};
-    Client * p{bryan.get()};
+    Client *p{bryan.get()};
     std::string signature{p->sign("mydata")};
     EXPECT_TRUE(crypto::verifySignature(p->get_publickey(), "mydata", signature));
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "notmydata", signature));
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "mydata", "not_my_signature"));
 }
 
-
-/*
-
-
-
-TEST(HW1Test, TEST10) {
+TEST(HW1Test, TEST10)
+{
     std::string sender{}, receiver{};
     double value;
     Server::parse_trx("sarah-clay-0.5", sender, receiver, value);
@@ -94,6 +92,12 @@ TEST(HW1Test, TEST10) {
     EXPECT_EQ(receiver, "clay");
     EXPECT_DOUBLE_EQ(value, 0.5);
 }
+
+/*
+
+
+
+
 
 TEST(HW1Test, TEST11) {
     std::string sender{}, receiver{};

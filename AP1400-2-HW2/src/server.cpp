@@ -3,9 +3,9 @@
 #include <random>
 
 using std::make_shared;
+using std::map;
 using std::shared_ptr;
 using std::string;
-using std::map;
 
 string addRandomString(string origin)
 {
@@ -44,7 +44,8 @@ shared_ptr<Client> Server::add_client(string id)
     return c;
 }
 
-map<shared_ptr<Client>,double>Server::get_clients() const{
+map<shared_ptr<Client>, double> Server::get_clients() const
+{
     return this->clients;
 }
 
@@ -71,25 +72,26 @@ double Server::get_wallet(std::string id)
     return 0;
 }
 
-
 std::vector<std::string> pending_trxs;
 
+void show_pending_transactions()
+{
+    std::cout << std::string(20, '*') << std::endl;
+    for (const auto &trx : pending_trxs)
+        std::cout << trx << std::endl;
+    std::cout << std::string(20, '*') << std::endl;
+}
 
+void show_wallets(const Server &server)
+{
+    std::cout << std::string(20, '*') << std::endl;
+    for (const auto &client : server.get_clients())
+        std::cout << client.first->get_id() << " : " << client.second << std::endl;
+    std::cout << std::string(20, '*') << std::endl;
+}
 
- void  show_pending_transactions()
- {
- 	std::cout  <<  std::string(20, '*') <<  std::endl;
- 	for(const  auto& trx : pending_trxs)
- 		std::cout << trx <<  std::endl;
- 	std::cout  <<  std::string(20, '*') <<  std::endl;
- }
-
-  void  show_wallets(const  Server& server)
- {
- 	std::cout << std::string(20, '*') << std::endl;
- 	for(const auto& client: server.get_clients())
- 		std::cout << client.first->get_id() <<  " : "  << client.second << std::endl;
- 	std::cout << std::string(20, '*') << std::endl;
- }
+bool Server::parse_trx(std::string trx, std::string sender, std::string receiver, double value)
+{
+}
 
 // Server
