@@ -22,7 +22,7 @@ double Client::get_wallet()
     return ((Server *)(this->server))->get_wallet(this->id);
 }
 
-string Client::get_publickey(){
+string Client::get_publickey() const{
     return this->public_key;
 }
 

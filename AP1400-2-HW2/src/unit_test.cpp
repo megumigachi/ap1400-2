@@ -93,12 +93,6 @@ TEST(HW1Test, TEST10)
     EXPECT_DOUBLE_EQ(value, 0.5);
 }
 
-/*
-
-
-
-
-
 TEST(HW1Test, TEST11) {
     std::string sender{}, receiver{};
     double value;
@@ -112,6 +106,17 @@ TEST(HW1Test, TEST12) {
     bool valid{bryan->transfer_money("no_one", 0.5)};
     EXPECT_FALSE(valid);
 }
+
+
+/*
+
+
+
+
+
+
+
+
 
 TEST(HW1Test, TEST13) {
     Server server{};

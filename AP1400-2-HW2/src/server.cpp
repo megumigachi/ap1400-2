@@ -1,11 +1,14 @@
 #include "server.h"
 #include <iostream>
 #include <random>
+#include<sstream>
+#include<string>
 
 using std::make_shared;
 using std::map;
 using std::shared_ptr;
 using std::string;
+using std::istringstream;
 
 string addRandomString(string origin)
 {
@@ -90,8 +93,38 @@ void show_wallets(const Server &server)
     std::cout << std::string(20, '*') << std::endl;
 }
 
-bool Server::parse_trx(std::string trx, std::string sender, std::string receiver, double value)
+bool Server::parse_trx(std::string trx, std::string &sender, std::string &receiver, double &value)
 {
+    vector<string> transaction=split(trx,'-');
+    // if (transaction.size()!=3){
+    //     throw std::runtime_error();
+    // }
+    
+    sender=transaction[0];
+    receiver=transaction[1];
+    value=std::stod(transaction[2]);
+    // try
+    // {
+    //     value=std::stod(transaction[2]);
+    // }
+    // catch(const std::exception& e)
+    // {
+    //     return false;
+    // }
+    return true;
+    //shared_ptr<Client> csender=
+    
+    
 }
 
+vector<string>split(string to_split,char delimiter){
+    istringstream iss(to_split);
+    vector<string>tokens;
+    string token;
+    while (std::getline(iss,token,delimiter))
+    {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
 // Server
