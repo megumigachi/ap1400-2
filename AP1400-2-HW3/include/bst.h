@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <functional>
+#include <initializer_list>
 
 using std::ostream;
 
@@ -22,6 +23,7 @@ public:
     };
 
     BST();
+    BST(std::initializer_list<int> initList);
     Node *get_root();
     size_t length();
     bool add_node(int value);

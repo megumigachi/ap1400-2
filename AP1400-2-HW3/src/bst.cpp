@@ -174,6 +174,7 @@ ostream &operator<<(ostream &os, BST bst)
                         << std::setw(16) << node->left
                         << std::setw(16) << node->right
                         << std::endl; });
+    return os;
 };
 
 Node **BST::find_node(int value)
@@ -187,7 +188,8 @@ Node **BST::find_node(int value)
     {
         if (ret->value == value)
         {
-            return &ret;
+            auto ret_ = new Node *(ret);
+            return ret_;
         }
         else if (value < ret->value)
         {
@@ -198,5 +200,136 @@ Node **BST::find_node(int value)
             ret = ret->right;
         }
     }
-    return &ret;
+    return nullptr;
+}
+
+Node **BST::find_parrent(int value)
+{
+    Node *p = this->root;
+    Node *ret = nullptr;
+    while (p != nullptr)
+    {
+        if (p->value == value)
+        {
+            return new Node *(ret);
+        }
+        else if (value < p->value)
+        {
+            ret = p;
+            p = p->left;
+        }
+        else
+        {
+            ret = p;
+            p = p->right;
+        }
+    }
+    return nullptr;
+}
+
+// 这个函数本来名字都错了，懒得写了
+BST::Node **BST::find_successor(int value)
+{
+    if (root == nullptr)
+        return nullptr;
+    auto b = find_node(value);
+    if (b == nullptr || (*b)->left == nullptr)
+    {
+        delete b;
+        return nullptr;
+    }
+    auto p = (*b)->left;
+    while (p != nullptr && p->right != nullptr)
+    {
+        p = p->right;
+    }
+    if (p == nullptr)
+    {
+        return nullptr;
+    }
+
+    auto res{new Node *{p}};
+    delete b;
+    return res;
+}
+
+// 太啥b了
+bool BST::delete_node(int value)
+{
+    auto node = find_node(value);
+    auto parent = find_parrent(value);
+
+    if (node == nullptr)
+    {
+        return false;
+    }
+
+    if ((*node)->left == nullptr && (*node)->right == nullptr)
+    {
+        if (get_root() == *node)
+            root = nullptr;
+        else
+        {
+            if (value > (*parent)->value)
+                (*parent)->right = nullptr;
+            else
+                (*parent)->left = nullptr;
+        }
+    }
+    else if ((*node)->left != nullptr && (*node)->right != nullptr)
+    {
+        auto next = find_successor(value);
+        auto new_one = new Node{(*next)->value, (*node)->left, (*node)->right};
+        delete_node((*next)->value);
+        delete next;
+        if (get_root() == *node)
+        {
+            new_one->left = root->left;
+            new_one->right = root->right;
+            root = new_one;
+        }
+        else
+        {
+            if ((*parent)->left == *node)
+                (*parent)->left = new_one;
+            else
+                (*parent)->right = new_one;
+        }
+    }
+    else
+    {
+        Node *new_one = nullptr;
+        if ((*node)->left)
+            new_one = (*node)->left;
+        else
+            new_one = (*node)->right;
+
+        if (root == *node)
+        {
+            new_one->left = root->left;
+            new_one->right = root->right;
+            root = new_one;
+        }
+        else
+        {
+            if ((*parent)->left == *node)
+                (*parent)->left = new_one;
+            else
+                (*parent)->right = new_one;
+        }
+    }
+    delete *node;
+    delete node;
+    delete parent;
+
+    return true;
+}
+
+BST::BST(std::initializer_list<int> initList)
+{
+    this->root = nullptr;
+    for (auto &i : initList)
+    {
+        this->add_node(i);
+    }
 }
