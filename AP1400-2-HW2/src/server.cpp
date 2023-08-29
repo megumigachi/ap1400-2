@@ -3,12 +3,15 @@
 #include <random>
 #include<sstream>
 #include<string>
+#include "crypto.h"
 
 using std::make_shared;
 using std::map;
 using std::shared_ptr;
 using std::string;
 using std::istringstream;
+
+std::vector<std::string> pending_trxs;
 
 string addRandomString(string origin)
 {
@@ -75,7 +78,6 @@ double Server::get_wallet(std::string id)
     return 0;
 }
 
-std::vector<std::string> pending_trxs;
 
 void show_pending_transactions()
 {
@@ -96,9 +98,10 @@ void show_wallets(const Server &server)
 bool Server::parse_trx(std::string trx, std::string &sender, std::string &receiver, double &value)
 {
     vector<string> transaction=split(trx,'-');
-    // if (transaction.size()!=3){
-    //     throw std::runtime_error();
-    // }
+    if (transaction.size()!=3){
+        std::runtime_error e("1");
+        throw e;
+    }
     
     sender=transaction[0];
     receiver=transaction[1];
@@ -115,6 +118,28 @@ bool Server::parse_trx(std::string trx, std::string &sender, std::string &receiv
     //shared_ptr<Client> csender=
     
     
+}
+
+
+bool Server::add_pending_trx(std::string trx, std::string signature){
+    //validate signature
+    std::string sender{};
+    std::string receiver{};
+    double value = 0;
+    try {
+        this->parse_trx(trx, sender, receiver, value);
+    } catch (std::runtime_error e) {
+        std::cout << e.what() << std::endl;
+        return false;
+    }
+    shared_ptr<Client> sd=this->get_client(sender);
+    if (sd==nullptr)
+    {
+        return false;
+    }
+    crypto::verifySignature(sd->get_publickey(),trx,signature);
+    pending_trxs.push_back(trx);
+    return true;
 }
 
 vector<string>split(string to_split,char delimiter){

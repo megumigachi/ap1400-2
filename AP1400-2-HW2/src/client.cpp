@@ -29,3 +29,10 @@ string Client::get_publickey() const{
 string Client::sign(string txt) const{
     return crypto::signMessage(this->private_key,txt);
 }
+
+bool Client::transfer_money(std::string receiver, double value){
+    string trx=this->id+"_"+receiver+"_"+std::to_string(value);
+    string signature=this->sign(trx);
+    Server *s=(Server*)this->server;
+    return s->add_pending_trx(trx,signature);
+}

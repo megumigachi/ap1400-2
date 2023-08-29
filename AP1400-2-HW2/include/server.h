@@ -30,4 +30,6 @@ private:
 void show_wallets(const Server &server);
 void show_pending_transactions();
 vector<string>split(string to_split, char delimiter);
+
+
 #endif // SERVER_H
