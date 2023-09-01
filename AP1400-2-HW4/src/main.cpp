@@ -5,10 +5,15 @@
 
 int main(int argc, char **argv)
 {
-    if (true) // make false to run unit-tests
+    if (false) // make false to run unit-tests
     {
-        // debug section 
-        
+        SharedPtr<double> ptr1{new double{1.567}};
+        SharedPtr<double> ptr2{new double{5.1234}};
+        ptr1 = ptr1;
+        ptr2 = SharedPtr<double>(ptr1);
+        EXPECT_DOUBLE_EQ(*ptr2, 1.567);
+        EXPECT_EQ(ptr1.use_count(), 2);
+        EXPECT_EQ(ptr2.use_count(), 2);
     }
     else
     {
@@ -20,5 +25,5 @@ int main(int argc, char **argv)
         else
             std::cout << "FAILED" << std::endl;
     }
-    return 0;   
+    return 0;
 }
