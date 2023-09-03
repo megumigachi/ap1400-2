@@ -6,13 +6,14 @@
 #include "cappuccino.h"
 #include "mocha.h"
 
-/*
+
 TEST(HW5Test, TEST1) {
     Cinnamon    cinnamon{2};  
     EXPECT_EQ(cinnamon.get_name(), "Cinnamon");
     EXPECT_EQ(cinnamon.get_price_unit(), 5);
     EXPECT_EQ(cinnamon.get_units(), 2);
     EXPECT_EQ(cinnamon.price(), 10);
+
 }
 
 TEST(HW5Test, TEST2) {
@@ -52,6 +53,14 @@ TEST(HW5Test, TEST4) {
     for(const auto& i : ingredients)
         EXPECT_TRUE(i->get_name() == "Espresso" || i->get_name() == "Milk" || i->get_name() == "MilkFoam");
 }
+
+/*
+
+
+
+
+
+
 
 TEST(HW5Test, TEST5) {
     Cappuccino cappuccino{};
