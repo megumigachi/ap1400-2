@@ -5,6 +5,7 @@
 #include "espresso_based.h"
 #include "cappuccino.h"
 #include "mocha.h"
+#include<iostream>
 
 TEST(HW5Test, TEST1)
 {

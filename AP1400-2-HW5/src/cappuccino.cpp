@@ -36,10 +36,12 @@ Cappuccino::~Cappuccino()
     {
         delete i;
     }
+    ingredients.clear();
     for (auto &&i : this->side_items)
     {
         delete i;
     }
+    side_items.clear();
 }
 
 void Cappuccino::add_side_item(Ingredient *ingredient)
