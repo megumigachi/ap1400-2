@@ -5,7 +5,7 @@
 #include "espresso_based.h"
 #include "cappuccino.h"
 #include "mocha.h"
-#include<iostream>
+#include <iostream>
 
 TEST(HW5Test, TEST1)
 {
@@ -74,12 +74,9 @@ TEST(HW5Test, TEST6)
     delete esp;
     EXPECT_EQ(sides.size(), 0);
 }
-/*
 
-
-
-
-TEST(HW5Test, TEST7) {
+TEST(HW5Test, TEST7)
+{
     Cappuccino cappuccino;
     cappuccino.add_side_item(new Chocolate{2});
     Cappuccino copy{cappuccino};
@@ -87,7 +84,8 @@ TEST(HW5Test, TEST7) {
     EXPECT_DOUBLE_EQ(copy.price(), 65);
 }
 
-TEST(HW5Test, TEST8) {
+TEST(HW5Test, TEST8)
+{
     Cappuccino cappuccino;
     cappuccino.add_side_item(new Water{1});
     Cappuccino equal;
@@ -96,12 +94,18 @@ TEST(HW5Test, TEST8) {
     EXPECT_EQ(equal.price(), 56);
 }
 
-TEST(HW5Test, TEST9) {
+TEST(HW5Test, TEST9)
+{
     Cappuccino equal;
     equal.add_side_item(new Sugar{2});
     equal = equal;
     EXPECT_EQ(equal.price(), 57);
 }
+
+/*
+
+
+
 
 TEST(HW5Test, TEST10) {
     Mocha mocha{};

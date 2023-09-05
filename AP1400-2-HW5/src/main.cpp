@@ -1,4 +1,6 @@
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include <gtest/gtest.h>
 #include "ingredient.h"
 #include "sub_ingredients.h"
@@ -6,36 +8,47 @@
 #include "cappuccino.h"
 #include "mocha.h"
 
-
-class Test {
+class MyClass
+{
 public:
-    Test() {
-        std::cout << "Test constructed" << std::endl;
+    std::vector<int> myVector;
+
+    MyClass()
+    {
+        myVector.push_back(1);
     }
-    ~Test() {
-        std::cout << "Test destructed" << std::endl;
+
+    ~MyClass()
+    {
+        std::cout << "~Myclass()" << std::endl;
     }
 };
 
-std::vector<Test>* createVector() {
-    return new std::vector<Test>(3);  // 创建包含3个 Test 对象的 vector，并返回其指针
-}
+class MyClass2 : public MyClass
+{
+public:
+    std::vector<int> myVector2;
 
-void deleteVector(std::vector<Test>* vecPtr) {
-    delete vecPtr;  // 删除 vector，触发其析构函数，从而触发所有 Test 对象的析构函数
-}
-
+    MyClass2()
+    {
+        myVector2.push_back(2);
+    }
+    ~MyClass2()
+    {
+        std::cout << "~Myclass2()" << std::endl;
+    }
+};
 
 int main(int argc, char **argv)
 {
     if (false) // make false to run unit-tests
     {
-    std::vector<Test>* vecPtr = createVector();  // 创建 vector，并获取其指针
-
-    // 这里，你可以通过 vecPtr 使用 vector
-
-    deleteVector(vecPtr);  
-    std::cout<<vecPtr->size()<<std::endl;
+        MyClass2 *esp{new MyClass2{}};
+        auto &sides = esp->myVector;
+        auto &sides2 = esp->myVector2;
+        delete esp;
+        EXPECT_EQ(sides2.size(), 1);
+        EXPECT_EQ(sides.size(), 1);
     }
     else
     {
@@ -47,5 +60,5 @@ int main(int argc, char **argv)
         else
             std::cout << "FAILED" << std::endl;
     }
-    return 0;   
+    return 0;
 }
