@@ -1,15 +1,18 @@
 #include "server.h"
 #include <iostream>
 #include <random>
-#include<sstream>
-#include<string>
+#include <sstream>
+#include <string>
 #include "crypto.h"
 
+using std::istringstream;
 using std::make_shared;
 using std::map;
 using std::shared_ptr;
 using std::string;
-using std::istringstream;
+
+using std::cout;
+using std::endl;
 
 std::vector<std::string> pending_trxs;
 
@@ -78,7 +81,6 @@ double Server::get_wallet(std::string id)
     return 0;
 }
 
-
 void show_pending_transactions()
 {
     std::cout << std::string(20, '*') << std::endl;
@@ -97,15 +99,17 @@ void show_wallets(const Server &server)
 
 bool Server::parse_trx(std::string trx, std::string &sender, std::string &receiver, double &value)
 {
-    vector<string> transaction=split(trx,'-');
-    if (transaction.size()!=3){
-        std::runtime_error e("1");
+    vector<string> transaction = split(trx, '-');
+    if (transaction.size() != 3)
+    {
+        std::runtime_error e("parse_trx error");
+        cout << "trx:" << trx << endl;
         throw e;
     }
-    
-    sender=transaction[0];
-    receiver=transaction[1];
-    value=std::stod(transaction[2]);
+
+    sender = transaction[0];
+    receiver = transaction[1];
+    value = std::stod(transaction[2]);
     // try
     // {
     //     value=std::stod(transaction[2]);
@@ -115,41 +119,105 @@ bool Server::parse_trx(std::string trx, std::string &sender, std::string &receiv
     //     return false;
     // }
     return true;
-    //shared_ptr<Client> csender=
-    
-    
+    // shared_ptr<Client> csender=
 }
 
-
-bool Server::add_pending_trx(std::string trx, std::string signature){
-    //validate signature
+bool Server::add_pending_trx(std::string trx, std::string signature)
+{
+    // validate signature
     std::string sender{};
     std::string receiver{};
     double value = 0;
-    try {
+    try
+    {
         this->parse_trx(trx, sender, receiver, value);
-    } catch (std::runtime_error e) {
+    }
+    catch (std::runtime_error e)
+    {
         std::cout << e.what() << std::endl;
         return false;
     }
-    shared_ptr<Client> sd=this->get_client(sender);
-    if (sd==nullptr)
+    shared_ptr<Client> sd = this->get_client(sender);
+    shared_ptr<Client> recv = this->get_client(receiver);
+    if (sd == nullptr || recv == nullptr)
+    {
+        cout << "sender==null" << endl;
+        return false;
+    }
+    if (sd->get_wallet() < value)
     {
         return false;
     }
-    crypto::verifySignature(sd->get_publickey(),trx,signature);
+
+    crypto::verifySignature(sd->get_publickey(), trx, signature);
     pending_trxs.push_back(trx);
     return true;
 }
 
-vector<string>split(string to_split,char delimiter){
+vector<string> split(string to_split, char delimiter)
+{
     istringstream iss(to_split);
-    vector<string>tokens;
+    vector<string> tokens;
     string token;
-    while (std::getline(iss,token,delimiter))
+    while (std::getline(iss, token, delimiter))
     {
         tokens.push_back(token);
     }
     return tokens;
+}
+
+size_t Server::mine()
+{
+    std::default_random_engine e;
+
+    std::string mempool = "";
+    for (int i = 0; i < pending_trxs.size(); i++)
+    {
+        mempool += pending_trxs[i];
+    }
+
+    cout << mempool << endl;
+
+    std::string id = "";
+    size_t n = 0;
+    std::string str = mempool;
+    size_t nonce = 0;
+    while (true)
+    {
+        for (auto &[k, v] : clients)
+        {
+            nonce += k->generate_nonce();
+            // cout << "nonce: " << nonce << endl;
+            std::string hash{crypto::sha256(str + std::to_string(nonce))};
+            if (hash.substr(0, 10).find("000") != std::string::npos)
+            {
+                std::cout << k->get_id() << std::endl;
+
+                // 完成交易
+                for (auto &&s : pending_trxs)
+                {
+                    std::string sender{};
+                    std::string receiver{};
+                    double value = 0;
+                    try
+                    {
+                        this->parse_trx(s, sender, receiver, value);
+                    }
+                    catch (std::runtime_error e)
+                    {
+                        std::cout << e.what() << std::endl;
+                        return -11111;
+                    }
+                    this->clients[this->get_client(sender)] -= value;
+                    this->clients[this->get_client(receiver)] += value;
+                }
+                v += 6.25;
+                pending_trxs.clear();
+                cout << "nonce: " << nonce << endl;
+                // cout <<
+                return nonce;
+            }
+        }
+    }
 }
 // Server

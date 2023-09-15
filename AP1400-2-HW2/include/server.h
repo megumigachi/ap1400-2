@@ -5,10 +5,10 @@
 #include <iostream>
 #include <memory>
 #include <map>
-#include<vector>
+#include <vector>
 
-using std::vector;
 using std::string;
+using std::vector;
 class Client;
 
 class Server
@@ -29,7 +29,7 @@ private:
 
 void show_wallets(const Server &server);
 void show_pending_transactions();
-vector<string>split(string to_split, char delimiter);
-
+vector<string> split(string to_split, char delimiter);
+extern std::vector<std::string> pending_trxs;
 
 #endif // SERVER_H
